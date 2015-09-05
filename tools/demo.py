@@ -23,6 +23,8 @@ import numpy as np
 import scipy.io as sio
 import caffe, os, sys, cv2
 import argparse
+import dlib
+from skimage import io
 
 CLASSES = ('__background__',
            'aeroplane', 'bicycle', 'bird', 'boat',
@@ -71,16 +73,28 @@ def vis_detections(im, class_name, dets, thresh=0.5):
     plt.tight_layout()
     plt.draw()
 
+def run_dlib_selective_search(image_name):
+    img = io.imread(image_name)
+    rects = []
+    dlib.find_candidate_object_locations(img,rects,min_size=500)
+    proposals = []
+    for k,d in enumerate(rects):
+        templist = [d.left(),d.top(),d.right(),d.bottom()]
+        proposals.append(templist)
+    proposals = np.array(proposals)
+    return proposals
+
 def demo(net, image_name, classes):
     """Detect object classes in an image using pre-computed object proposals."""
 
     # Load pre-computed Selected Search object proposals
     box_file = os.path.join(cfg.ROOT_DIR, 'data', 'demo',
                             image_name + '_boxes.mat')
-    obj_proposals = sio.loadmat(box_file)['boxes']
+    #obj_proposals = sio.loadmat(box_file)['boxes']
+    im_file = os.path.join(cfg.ROOT_DIR, 'data', 'demo', image_name + '.jpg')
+    obj_proposals = run_dlib_selective_search(im_file)
 
     # Load the demo image
-    im_file = os.path.join(cfg.ROOT_DIR, 'data', 'demo', image_name + '.jpg')
     im = cv2.imread(im_file)
 
     # Detect all object classes and regress object bounds
