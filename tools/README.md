@@ -11,4 +11,5 @@ To run the changed demo, you need to compile dlib for python:
         ./compile_dlib_python_module.bat 
         sudo cp dlib.so /usr/local/lib/python2.7/dist-packages/
    if import dlib in python shell gives no error, the dlib shoud be ready.
+   
 3. Then just install fast-rcnn and run demo.py. A dog should be detected in the shown image. Change the image to your own to run detection by fast-rcnn(only the 20 classes in Pascal Voc).
