@@ -11,7 +11,9 @@ __sets = {}
 
 import datasets.pascal_voc
 import datasets.inria
+import datasets.imagenet
 import numpy as np
+
 
 def _selective_search_IJCV_top_k(split, year, top_k):
     """Return an imdb that uses the top k proposals from the selective search
@@ -43,6 +45,12 @@ inria_devkit_path = '/home/xuetingli/test/INRIA'
 for split in ['train', 'test']:
     name = '{}_{}'.format('inria', split)
     __sets[name] = (lambda split=split: datasets.inria(split, inria_devkit_path))
+   
+# Set up inria_<split> using selective search "fast" mode
+imagenet_devkit_path = '/home/xuetingli/imagenet'
+for split in ['train', 'test']:
+    name = '{}_{}'.format('imagenet', split)
+    __sets[name] = (lambda split=split: datasets.imagenet(split, imagenet_devkit_path))
 
 towncenter_devkit_path = '/home/szy/TownCenter'
 for split in ['test']:

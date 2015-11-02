@@ -9,6 +9,7 @@ from .imdb import imdb
 from .pascal_voc import pascal_voc
 from .inria import inria
 from . import factory
+from .imagenet import imagenet
 
 import os.path as osp
 ROOT_DIR = osp.join(osp.dirname(__file__), '..', '..')

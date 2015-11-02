@@ -12,6 +12,8 @@ Demo script showing detections in sample images.
 
 See README.md for installation instructions before running.
 """
+import sys
+sys.path.append('/usr/local/lib/python2.7/site-packages')
 
 import _init_paths
 from fast_rcnn.config import cfg
@@ -25,13 +27,15 @@ import caffe, os, sys, cv2
 import argparse
 import dlib
 from skimage import io
-
+'''
 CLASSES = ('__background__',
            'aeroplane', 'bicycle', 'bird', 'boat',
            'bottle', 'bus', 'car', 'cat', 'chair',
            'cow', 'diningtable', 'dog', 'horse',
            'motorbike', 'person', 'pottedplant',
            'sheep', 'sofa', 'train', 'tvmonitor')
+'''
+CLASSES = ('__background__','n02958343','n02769748')
 
 NETS = {'vgg16': ('VGG16',
                   'vgg16_fast_rcnn_iter_40000.caffemodel'),
@@ -76,7 +80,7 @@ def vis_detections(im, class_name, dets, thresh=0.5):
 def run_dlib_selective_search(image_name):
     img = io.imread(image_name)
     rects = []
-    dlib.find_candidate_object_locations(img,rects,min_size=500)
+    dlib.find_candidate_object_locations(img,rects,min_size=50)
     proposals = []
     for k,d in enumerate(rects):
         templist = [d.left(),d.top(),d.right(),d.bottom()]
@@ -88,8 +92,7 @@ def demo(net, image_name, classes):
     """Detect object classes in an image using pre-computed object proposals."""
 
     # Load pre-computed Selected Search object proposals
-    box_file = os.path.join(cfg.ROOT_DIR, 'data', 'demo',
-                            image_name + '_boxes.mat')
+    #box_file = os.path.join(cfg.ROOT_DIR, 'data', 'demo',image_name + '_boxes.mat')
     #obj_proposals = sio.loadmat(box_file)['boxes']
     im_file = os.path.join(cfg.ROOT_DIR, 'data', 'demo', image_name + '.jpg')
     obj_proposals = run_dlib_selective_search(im_file)
@@ -104,13 +107,14 @@ def demo(net, image_name, classes):
     timer.toc()
     print ('Detection took {:.3f}s for '
            '{:d} object proposals').format(timer.total_time, boxes.shape[0])
-
+    
     # Visualize detections for each class
     CONF_THRESH = 0.8
     NMS_THRESH = 0.3
     for cls in classes:
         cls_ind = CLASSES.index(cls)
         cls_boxes = boxes[:, 4*cls_ind:4*(cls_ind + 1)]
+
         cls_scores = scores[:, cls_ind]
         keep = np.where(cls_scores >= CONF_THRESH)[0]
         cls_boxes = cls_boxes[keep, :]
@@ -132,7 +136,7 @@ def parse_args():
                         help='Use CPU mode (overrides --gpu)',
                         action='store_true')
     parser.add_argument('--net', dest='demo_net', help='Network to use [vgg16]',
-                        choices=NETS.keys(), default='vgg16')
+                        choices=NETS.keys(), default='caffenet')
 
     args = parser.parse_args()
 
@@ -143,6 +147,7 @@ if __name__ == '__main__':
 
     prototxt = os.path.join(cfg.ROOT_DIR, 'models', NETS[args.demo_net][0],
                             'test.prototxt')
+    print prototxt
     caffemodel = os.path.join(cfg.ROOT_DIR, 'data', 'fast_rcnn_models',
                               NETS[args.demo_net][1])
 
@@ -159,17 +164,7 @@ if __name__ == '__main__':
 
     print '\n\nLoaded network {:s}'.format(caffemodel)
 
-    '''
-    print '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
-    print 'Demo for data/demo/000004.jpg'
-    demo(net, '000004', ('car',))
+    demo(net,'bag',('n02769748',))
 
-    print '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
-    print 'Demo for data/demo/001551.jpg'
-    demo(net, '001551', ('sofa', 'tvmonitor'))
-    '''
-    print '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
-    print 'Demo for data/demo/corgi.jpg'
-    demo(net, 'corgi', ('dog',))
 
     plt.show()
