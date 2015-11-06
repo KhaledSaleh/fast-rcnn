@@ -15,16 +15,5 @@ To run the changed demo, you need to compile dlib for python:
    
 3. Then just install fast-rcnn and run demo.py. A dog should be detected in the shown image. Change the image to your own to run detection by fast-rcnn(only the 20 classes in Pascal Voc).
 
-## Training and testing on INRIA without MATLAB
-*All codes training on INRIA are forked from the reference page, I only change some code to get rid of the MATLAB*
-
-1. Using generate_bbox.py to generate train.mat and copy it to the dataset path as the reference page says.
-2. Train the net on INRIA as the reference page.
-3. Change all 'train.mat' in generate_bbox.py to 'test.mat'
-4. Using generate_bbox.py to generate test.mat and copy it to the dataset path as the reference page says.
-5. Running evaluation.py to caculate accuracy on the test dataset.
-
-*All paths in the files are sepecific to my own computer, sorry for my laziness to change them. You might need to find them and change to your own. I will focus on training fast rcnn on ImageNet, when that is done, I might get rid of the sepecific paths and make this project more general*
-
-## Reference:
-https://github.com/zeyuanxy/fast-rcnn/tree/master/help/train
+## Training and testing on Imagenet without MATLAB
+Please reference to my [blog](http://sunshineatnoon.github.io/Train-fast-rcnn-model-on-imagenet-without-matlab/).
