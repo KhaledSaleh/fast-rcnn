@@ -18,8 +18,8 @@ def run_dlib_selective_search(image_name):
     proposals = np.array(proposals)
     return proposals
 
-imagenet_path = '/home/xuetingli/test/INRIA/data/Images/'
-names = '/home/xuetingli/test/INRIA/data/ImageSets/test.txt'
+imagenet_path = '/path/to/imagenet/data/Images/'
+names = 'path/to/imagenet/data/ImageSets/test.txt'
 
 count = 0
 all_proposals = []
