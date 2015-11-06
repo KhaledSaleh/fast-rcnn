@@ -19,7 +19,7 @@ def run_dlib_selective_search(image_name):
     return proposals
 
 imagenet_path = '/path/to/imagenet/data/Images/'
-names = 'path/to/imagenet/data/ImageSets/test.txt'
+names = 'path/to/imagenet/data/ImageSets/train.txt'
 
 count = 0
 all_proposals = []
@@ -32,7 +32,7 @@ for line in nameFile.readlines():
 	count = count+1;
 	print count
 
-sio.savemat('test.mat',mdict={'all_boxes':all_proposals,'images':imagenms})
-obj_proposals = sio.loadmat('test.mat')
+sio.savemat('train.mat',mdict={'all_boxes':all_proposals,'images':imagenms})
+obj_proposals = sio.loadmat('train.mat')
 print obj_proposals
 
