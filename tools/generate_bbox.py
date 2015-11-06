@@ -35,18 +35,4 @@ for line in nameFile.readlines():
 sio.savemat('test.mat',mdict={'all_boxes':all_proposals,'images':imagenms})
 obj_proposals = sio.loadmat('test.mat')
 print obj_proposals
-'''
-for parent,dirnames,filenames in os.walk(path):
-	for file in filenames:
-		imagenms.append(np.array(file.split('.')[0]))
 
-		filename = path + file
-		single_proposal = run_dlib_selective_search(filename)
-		all_proposals.append(single_proposal)
-		count = count+1;
-		print count
-
-sio.savemat('train.mat',mdict={'boxes':all_proposals,'images':imagenms})
-obj_proposals = sio.loadmat('train.mat')
-print obj_proposals
-'''
